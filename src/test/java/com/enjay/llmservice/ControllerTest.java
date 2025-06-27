@@ -20,5 +20,4 @@ class ControllerTest {
         String hi = ollamaChatModel.call(new UserMessage("hi"));
         Assertions.assertThat(hi).isNotNull();
     }
-
 }

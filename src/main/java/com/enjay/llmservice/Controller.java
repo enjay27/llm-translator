@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Locale;
 
 @RestController
 @RequiredArgsConstructor
@@ -58,16 +59,10 @@ public class Controller {
         chatMemory.add(id, call.getResult().getOutput());
 
         // Store in database
-        String responseContent = call.getResult().getOutput().toString();
+        String responseContent = call.getResult().getOutput().getText();
 
-        // Save the original response first
-        LlmResponse originalResponse = LlmResponse.builder()
-                .conversationId(id)
-                .userMessage(messageRequest.text())
-                .llmResponse(responseContent)
-                .responseType(LlmResponse.ResponseType.ORIGINAL)
-                .build();
-        llmResponseRepository.save(originalResponse);
+        // Remove <think> tags if present
+        responseContent = removeThinkTags(responseContent);
 
         // Try to parse JSON response and extract language-specific content
         try {
@@ -122,4 +117,17 @@ public class Controller {
     }
 
     public record MessageRequest(String text) {}
+
+    /**
+     * Removes <think> tags and their contents from the input string.
+     * 
+     * @param input The input string that may contain <think> tags
+     * @return The input string with <think> tags and their contents removed
+     */
+    private String removeThinkTags(String input) {
+        if (input == null) {
+            return null;
+        }
+        return input.replaceAll("(?s)<think>.*?</think>", "");
+    }
 }
