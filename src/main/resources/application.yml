@@ -27,3 +27,12 @@ spring:
     compose:
       enabled: true
 debug: true
+
+# Swagger/OpenAPI Configuration
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+    tagsSorter: alpha
+  api-docs:
+    path: /api-docs

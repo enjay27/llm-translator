@@ -23,7 +23,7 @@ public class LlmResponse {
     @Column(nullable = false)
     private String conversationId;
 
-    @Column(nullable = false)
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String userMessage;
 
     @Column(columnDefinition = "TEXT", nullable = false)
